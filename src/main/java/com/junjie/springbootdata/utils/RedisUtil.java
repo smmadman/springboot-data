@@ -569,4 +569,17 @@ public final class RedisUtil {
 
     }
 
+    /**
+     * 移除列表的最后一个元素，返回值为移除的元素。
+     * @return 最后的元素
+     */
+    public Object lpop(String key){
+        if(redisTemplate.opsForList().size(key) > 0){
+            Object value = redisTemplate.opsForList().rightPop(key);
+            return value;
+        }else{
+            return null;
+        }
+    }
+
 }

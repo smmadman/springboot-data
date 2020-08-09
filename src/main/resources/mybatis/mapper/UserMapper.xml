@@ -26,4 +26,18 @@
     <insert id="addUserWithoutId" parameterType="User">
         insert into t_user  (username, password, email) values (#{username}, #{password}, #{email})
     </insert>
+
+    <select id="countLines" resultType="int">
+        select count(*) from t_user
+    </select>
+
+    <select id="queryUserByName" resultType="User" parameterType="string">
+        select * from t_user where username = #{name}
+    </select>
+
+    <select id="queryIndexByPage" resultType="int" >
+        select id from t_user limit #{start}, #{size}
+    </select>
+
+
 </mapper>

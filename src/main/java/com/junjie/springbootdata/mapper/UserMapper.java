@@ -23,4 +23,9 @@ public interface UserMapper {
 
     int addUserWithoutId(User user);
 
+    int countLines();
+
+    User queryUserByName(String name);
+
+    List<Integer> queryIndexByPage(int start, int size);
 }
