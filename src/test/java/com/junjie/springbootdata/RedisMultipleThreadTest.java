@@ -32,8 +32,6 @@ public class RedisMultipleThreadTest {
         customMultiThreadingService.executeReadRedisKeys();
         customMultiThreadingService.executeReadRedisKeys();
         customMultiThreadingService.executeReadRedisKeys();
-//        customMultiThreadingService.executeReadRedisKeys();
-//        customMultiThreadingService.executeReadRedisKeys();
         while(true);
     }
 
