@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -371,7 +372,6 @@ public final class RedisUtil {
 
     /**
      * 获取set缓存的长度
-     *
      * @param key 键
      */
     public long sGetSetSize(String key) {
@@ -399,6 +399,36 @@ public final class RedisUtil {
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    /**
+     * 返回集合中所有的成员
+     * @param key
+     * @return
+     */
+    public HashSet<Object> smembers(String key){
+        try {
+            HashSet<Object> set = (HashSet<Object>) redisTemplate.opsForSet().members(key);
+            return set;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     *移除并返回集合中的一个随机元素
+     * @param key
+     * @return
+     */
+    public Object spop(String key){
+        try {
+            Object obj = redisTemplate.opsForSet().pop(key);
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -490,13 +520,13 @@ public final class RedisUtil {
 
 
     /**
-     * 将list放入缓存
-     *
+     * 将list放入缓存 //此处有bug ，pushall 本来有两个重载，一个是list 一个是数组，但是现在不管怎么调用只会进入数组的那个
+     *所以用的时候先转换成数组
      * @param key   键
      * @param value 值
      * @return
      */
-    public boolean lSet(String key, List<Object> value) {
+    public boolean lSetList(String key, Integer... value) {
         try {
             redisTemplate.opsForList().rightPushAll(key, value);
             return true;
@@ -504,8 +534,8 @@ public final class RedisUtil {
             e.printStackTrace();
             return false;
         }
-
     }
+
 
 
     /**
@@ -530,7 +560,7 @@ public final class RedisUtil {
 
 
     /**
-     * 根据索引修改list中的某条数据
+     * 根据索引修改list中的某条数据 //此处泛型指定为了Integer
      *
      * @param key   键
      * @param index 索引
@@ -574,12 +604,14 @@ public final class RedisUtil {
      * @return 最后的元素
      */
     public Object lpop(String key){
-        if(redisTemplate.opsForList().size(key) > 0){
-            Object value = redisTemplate.opsForList().rightPop(key);
-            return value;
-        }else{
-            return null;
-        }
+//        if(redisTemplate.opsForList().size(key) > 0){
+//            Object value = redisTemplate.opsForList().rightPop(key);
+////            System.out.println(value);
+//            return value;
+//        }else{
+//            return null;
+//        }
+        return redisTemplate.opsForList().rightPop(key);
     }
 
 }

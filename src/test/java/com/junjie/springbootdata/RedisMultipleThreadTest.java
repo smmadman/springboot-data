@@ -1,6 +1,7 @@
 package com.junjie.springbootdata;
 
 import com.junjie.springbootdata.service.CustomMultiThreadingService;
+import com.junjie.springbootdata.utils.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,9 @@ public class RedisMultipleThreadTest {
     @Autowired
     CustomMultiThreadingService customMultiThreadingService;
 
+    @Autowired
+    RedisUtil redisUtil;
+
     @Test
     public void writeTest(){
         customMultiThreadingService.executeWriteRedisKeys();
@@ -18,16 +22,19 @@ public class RedisMultipleThreadTest {
     }
 
     @Test
-    public void showTest() {
-        customMultiThreadingService.executeShowRedisKeys();
+    public void showTest() throws InterruptedException {
+        customMultiThreadingService.executeShowRedisSetKeys();
         while(true);
     }
 
     @Test
     public void readTest() throws InterruptedException {
-        while(true){
-            customMultiThreadingService.executeReadRedisKeys();
-            Thread.sleep(1000);
-        }
+        customMultiThreadingService.executeReadRedisKeys();
+        customMultiThreadingService.executeReadRedisKeys();
+        customMultiThreadingService.executeReadRedisKeys();
+//        customMultiThreadingService.executeReadRedisKeys();
+//        customMultiThreadingService.executeReadRedisKeys();
+        while(true);
     }
+
 }
